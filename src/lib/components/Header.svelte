@@ -30,6 +30,6 @@
 	}
 
 	.container {
-		padding: 2em 0;
+		padding: 2em 0 0 0;
 	}
 </style>

@@ -51,5 +51,6 @@
 		width: 100%;
 		padding: 1rem;
 		text-align: center;
+		background-color: var(--pico-background-color);
 	}
 </style>
