@@ -1,9 +1,7 @@
 import type { Link } from '$lib/types';
 
 export async function isLinkWorking(url: string): Promise<boolean> {
-	const corsUrl = 'https://thingproxy.freeboard.io/fetch/' + encodeURIComponent(url);
-
-	return fetch(corsUrl, {
+	return fetch(url, {
 		headers: {
 			'Content-Type': 'application/json'
 		},
