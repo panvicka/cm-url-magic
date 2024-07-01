@@ -7,13 +7,8 @@ export async function handle({
 	resolve
 }: Parameters<Handle>[0]): Promise<ReturnType<Handle>> {
 	const url = new URL(event.request.url);
-	if (url.pathname.startsWith('/api')) {
-		return new Response('OK', {
-			status: 200
-		});
-	}
 
-	if (url.pathname.startsWith('/')) {
+	if (url.pathname.startsWith('/') && !url.pathname.startsWith('/api')) {
 		const auth = event.request.headers.get('Authorization');
 		if (auth !== `Basic ${btoa(ADMIN_LOGIN)}`) {
 			return new Response('Not authorized', {
