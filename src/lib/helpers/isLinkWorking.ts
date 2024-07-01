@@ -1,17 +1,15 @@
 import type { Link } from '$lib/types';
 
 export async function isLinkWorking(url: string): Promise<boolean> {
-	const corsUrl = 'https://thingproxy.freeboard.io/fetch/' + encodeURIComponent(url);
-	return fetch(corsUrl, {
-		method: 'GET'
-	})
-		.then((response) => {
-			console.log(response);
-			return response.ok || response.status === 401 || response.status === 302;
-		})
-		.catch(() => {
-			return false;
-		});
+	const res = await fetch('/api', {
+		method: 'OPTIONS',
+		body: JSON.stringify(url)
+	});
+
+	if (res.status === 200 || res.status === 401) {
+		return true;
+	}
+	return false;
 }
 
 export async function checkLinks(
