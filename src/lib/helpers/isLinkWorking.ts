@@ -2,12 +2,10 @@ import type { Link } from '$lib/types';
 
 export async function isLinkWorking(url: string): Promise<boolean> {
 	return fetch(url, {
-		headers: {
-			'Content-Type': 'application/json'
-		},
 		method: 'GET'
 	})
 		.then((response) => {
+			console.log(response);
 			return response.ok || response.status === 401;
 		})
 		.catch(() => {
