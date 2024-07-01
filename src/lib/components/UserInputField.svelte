@@ -17,6 +17,6 @@
 		name="text"
 		placeholder="Text"
 		aria-label="Text"
-		on:change={(e) => change(e)}
+		on:input={(e) => change(e)}
 	/>
 </div>
