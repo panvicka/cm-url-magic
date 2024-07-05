@@ -13,19 +13,59 @@
 	import { isLinkWorking } from '$lib/helpers/isLinkWorking';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
+	import { queryParam } from 'sveltekit-search-params';
+	import { onMount } from 'svelte';
+
+	const mainInputUrlParam = queryParam('mainInput');
+	const optionalInputUrlParam = queryParam('secondaryInput');
 
 	let links: Link[] = [];
 
 	let userInfo: userInfoType = {};
-	let mainUserInput = '';
-	let optionalUserInput = '';
+
+	$: mainUserInput = $mainInputUrlParam;
+	$: optionalUserInput = $optionalInputUrlParam;
+
+	$: {
+		mainUserInput = $mainInputUrlParam;
+		evaluateInput();
+	}
+	$: {
+		optionalUserInput = $optionalInputUrlParam;
+		evaluateInput();
+	}
+
+	onMount(() => {
+		if (mainInputUrlParam) {
+			mainUserInput = $mainInputUrlParam || '';
+		} else {
+			mainUserInput = '';
+		}
+		if (optionalInputUrlParam) {
+			optionalUserInput = $optionalInputUrlParam || '';
+		} else {
+			optionalUserInput = '';
+		}
+		if ($mainInputUrlParam || $optionalInputUrlParam) {
+			evaluateInput();
+		}
+	});
 
 	const evaluateOptionalTicketIdentification = (userInputValue: string) => {
 		userInfo.optionalTicketNumber = evaluateTicketNumber(userInputValue);
 	};
 
 	function evaluateInput() {
-		links = [];
+		mainUserInput = mainUserInput?.trim() || '';
+		optionalUserInput = optionalUserInput?.trim() || '';
+
+		if (mainUserInput) {
+			$mainInputUrlParam = mainUserInput;
+		}
+		if (optionalUserInput) {
+			$optionalInputUrlParam = optionalUserInput;
+		}
+
 		userInfo = {
 			environment: undefined,
 			ticketNumber: '',
@@ -50,6 +90,7 @@
 	<form>
 		<fieldset>
 			<UserInputField
+				bind:value={$mainInputUrlParam}
 				on:change={({ detail }) => {
 					mainUserInput = detail.value;
 					evaluateInput();
@@ -59,6 +100,7 @@
 		</fieldset>
 		<fieldset>
 			<UserInputField
+				bind:value={$optionalInputUrlParam}
 				on:change={({ detail }) => {
 					optionalUserInput = detail.value;
 					evaluateOptionalTicketIdentification(optionalUserInput);

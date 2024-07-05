@@ -6,7 +6,7 @@
 	function change(e: Event) {
 		dispatch('change', { value: (e.target as HTMLInputElement).value });
 	}
-
+	export let value: string | null = '';
 	export let label = '';
 </script>
 
@@ -17,6 +17,7 @@
 		name="text"
 		placeholder="Text"
 		aria-label="Text"
+		bind:value
 		on:input={(e) => change(e)}
 	/>
 </div>
