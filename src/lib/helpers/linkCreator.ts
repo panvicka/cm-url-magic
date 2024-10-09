@@ -6,6 +6,15 @@ import {
 	type userInfoType
 } from '$lib/types';
 
+const getLocalHostPath = ({ language, path }: { language?: string; path: string }) => {
+ 	return [
+		{
+			name: 'Localhost',
+			href: `http://localhost:8081/${language || DEFAULT_PROD_LANG}/${path}`
+		}
+	];
+};
+
 const getJiraTicketPath = ({ ticketNumber }: { ticketNumber?: string }) => {
 	if (!ticketNumber) return [];
 	return [
@@ -117,23 +126,26 @@ export const linkCreator = (userInfo: userInfoType) => {
 		links = [
 			...links,
 			...getProdPreviewPath({ language, path }),
-			...getStagePreviewPath({ language, path })
+			...getStagePreviewPath({ language, path }),
+			...getLocalHostPath({ language, path })
 		];
 	}
 	if (environment?.name === Environments.PROD_PREVIEW) {
 		links = [
 			...links,
 			...getProdPath({ language, path }),
-			...getStagePreviewPath({ language, path })
+			...getStagePreviewPath({ language, path }),
+			...getLocalHostPath({ language, path })
+
 		];
 	}
 
 	if (environment?.name === Environments.DEV_PREVIEW) {
-		links = [...links, ...getStagePreviewPath({ language, path })];
+		links = [...links, ...getStagePreviewPath({ language, path }), ...getLocalHostPath({ language, path })];
 	}
 
 	if (environment?.name === Environments.STAGE_PREVIEW) {
-		links = [...links, ...getDevPath({ language, path })];
+		links = [...links, ...getDevPath({ language, path }), ...getLocalHostPath({ language, path })];
 	}
 
 	return links;
