@@ -26,7 +26,8 @@ export enum Environments {
 	STAGE = 'STAGE',
 	STAGE_PREVIEW = 'STAGE_PREVIEW',
 	PROD = 'PROD',
-	PROD_PREVIEW = 'PROD_PREVIEW'
+	PROD_PREVIEW = 'PROD_PREVIEW',
+	LOCALHOST = 'LOCALHOST'
 }
 
 export type EnvironmentType = {
@@ -60,5 +61,10 @@ export const Environment: EnvironmentType[] = [
 		name: Environments.PROD_PREVIEW,
 		label: 'preview prod',
 		path: 'preview-e2e-sales.ksb.com'
+	},
+	{
+		name: Environments.LOCALHOST,
+		label: 'localhost',
+		path: 'localhost:8081'
 	}
 ];

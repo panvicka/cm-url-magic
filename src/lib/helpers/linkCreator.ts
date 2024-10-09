@@ -148,5 +148,9 @@ export const linkCreator = (userInfo: userInfoType) => {
 		links = [...links, ...getDevPath({ language, path }), ...getLocalHostPath({ language, path })];
 	}
 
+	if (environment?.name === Environments.LOCALHOST) {
+		links = [...links, ...getDevPath({ language, path }), ...getProdPath({ language, path }), ...getStagePreviewPath({ language, path })];
+	}
+
 	return links;
 };

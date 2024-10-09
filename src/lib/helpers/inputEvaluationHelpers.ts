@@ -22,6 +22,10 @@ export const evaluateEnvironment = (userInputValue: string) => {
 		foundEnvironment = Environment.find((env) => env.name === Environments.STAGE_PREVIEW);
 	}
 
+	if (userInputValue.includes('localhost')) {
+		foundEnvironment = Environment.find((env) => env.name === Environments.LOCALHOST);
+	}
+
 	return foundEnvironment;
 };
 
@@ -57,6 +61,7 @@ export const evaluatePath = (
 	environment?: EnvironmentType,
 	language?: string
 ) => {
+	const regexToMatchTheRestOfTheURLLocalhost = /http:\/\/localhost:8081(\/.*)/;
 	const regexToMatchTheRestOfTheURL = /\.berlin(\/.*)/;
 	const regexToMatchTheRestOfTheURLProd = /\.ksb.com(\/.*)/;
 	let matchedRestURL: RegExpMatchArray | null;
@@ -65,14 +70,21 @@ export const evaluatePath = (
 		matchedRestURL = userInputValue.match(regexToMatchTheRestOfTheURLProd);
 		if (matchedRestURL) {
 			path = matchedRestURL[1];
-			path = language ? path.replace(language, '') : path;
+			path = language ? path?.replace(language, '') : path;
+			path = path.replace(/^\/+/, '');
+		}
+	} else if (environment?.name === Environments.LOCALHOST){
+		matchedRestURL = userInputValue.match(regexToMatchTheRestOfTheURLLocalhost);
+		if (matchedRestURL) {
+			path = matchedRestURL[1];
+			path = language ? path?.replace(language, '') : path;
 			path = path.replace(/^\/+/, '');
 		}
 	} else {
 		matchedRestURL = userInputValue.match(regexToMatchTheRestOfTheURL);
 		if (matchedRestURL) {
 			path = matchedRestURL[1];
-			path = language ? path.replace(language, '') : path;
+			path = language ? path?.replace(language, '') : path;
 			path = path.replace(/^\/+/, '');
 		}
 	}
